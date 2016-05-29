@@ -30,5 +30,15 @@ module.exports = {
 		platform: "linux64",
 		tasks: [ "compress:linux64" ],
 		checksum: "<%= compress.linux64.options.archive %>"
+	},
+
+	linux32deb: {
+		platform: "linux32",
+		tasks: [ "fpm:deb32" ]
+	},
+
+	linux64deb: {
+		platform: "linux64",
+		tasks: [ "fpm:deb64" ]
 	}
 };

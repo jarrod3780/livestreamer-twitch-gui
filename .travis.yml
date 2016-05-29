@@ -14,6 +14,7 @@ addons:
   apt:
     packages:
       - ruby-dev
+      - devscripts
 
 cache:
   apt: true
