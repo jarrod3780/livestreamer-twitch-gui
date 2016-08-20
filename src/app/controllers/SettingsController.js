@@ -7,6 +7,8 @@ import {
 	Controller
 } from "Ember";
 import {
+	main,
+	files,
 	langs,
 	themes
 } from "config";
@@ -14,11 +16,22 @@ import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
 import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
-import platform from "utils/node/platform";
+import {
+	isWin,
+	isWinGte8,
+	isDarwin
+} from "utils/node/platform";
+import resolvePath from "utils/node/resolvePath";
+import {
+	isSupported as isNotificationSupported,
+	show as showNotification
+} from "utils/Notification";
 
 
 const { alias, equal } = computed;
 const { service } = inject;
+const { "display-name": displayName } = main;
+const { icons: { big: bigIcon } } = files;
 const { themes: themesList } = themes;
 
 
@@ -38,7 +51,10 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	qualities,
 	Settings,
-	platform,
+	platform: {
+		isWinGte8,
+		isDarwin
+	},
 
 
 	hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
@@ -121,6 +137,14 @@ export default Controller.extend( RetryTransitionMixin, {
 	}),
 
 
+	// filter available notification providers
+	notifyProvider: function() {
+		return Settings.notify_provider.filter(function( item ) {
+			return isNotificationSupported( item.value );
+		});
+	}.property(),
+
+
 	actions: {
 		apply( success, failure ) {
 			var modal  = get( this, "modal" );
@@ -153,6 +177,21 @@ export default Controller.extend( RetryTransitionMixin, {
 			Object.keys( filters.content ).forEach(function( key ) {
 				set( filters, key, all );
 			});
+		},
+
+		testNotification( success, failure ) {
+			let provider = get( this, "model.notify_provider" );
+			let icon = isWin && !DEBUG
+				? resolvePath( "%NWJSAPPPATH%", bigIcon )
+				: resolvePath( bigIcon );
+			let notification = {
+				title: displayName,
+				message: "This is a test notification",
+				icon: `file://${icon}`
+			};
+			showNotification( provider, notification, provider !== "auto" )
+				.then( success, failure )
+				.catch(function() {});
 		}
 	}
 });
