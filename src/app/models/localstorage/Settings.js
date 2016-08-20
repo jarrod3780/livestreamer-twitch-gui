@@ -148,7 +148,7 @@ export default Model.extend({
 			label: {
 				name: "Notification center",
 				description: "Native notifications on MacOS",
-				notes: "Does not support click events"
+				notes: "Notifications can be configured in your system preferences"
 			}
 		},
 		{
