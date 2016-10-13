@@ -38,6 +38,7 @@ module.exports = {
 
 			depends: [
 				"livestreamer (>= 1.12.2)",
+				"libc-bin",
 				"xdg-utils",
 				"x11-utils"
 			],
@@ -78,6 +79,7 @@ module.exports = {
 
 			depends: [
 				"livestreamer (>= 1.12.2)",
+				"libc-bin",
 				"xdg-utils",
 				"x11-utils"
 			],
@@ -118,6 +120,7 @@ module.exports = {
 
 			depends: [
 				"livestreamer >= 1.12.2",
+				"glibc-common",
 				"xdg-utils",
 				"xorg-x11-utils"
 			],
@@ -149,6 +152,7 @@ module.exports = {
 
 			depends: [
 				"livestreamer >= 1.12.2",
+				"glibc-common",
 				"xdg-utils",
 				"xorg-x11-utils"
 			],
